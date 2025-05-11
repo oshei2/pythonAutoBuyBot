@@ -1,17 +1,43 @@
 #pythonAutoBuyBot
-from selenium import webdriver
 from selenium.webdriver.common.by import By
-import chromedriver_autoinstaller
+import undetected_chromedriver as webdriver
 
-#url for product page and xpath for add to cart button
-url = 'https://www.newegg.com/asus-tuf-gaming-tuf-rtx5070ti-o16g-gaming-nvidia-geforce-rtx-5070-ti-16gb-gddr7/p/N82E16814126754'
-xpath = '//*[@id="ProductBuy"]/div[1]/div[2]/button'
+#load profile
+chrome_options = webdriver.ChromeOptions()
+chrome_options.add_argument("--user-data-dir=/tmp/botProfile")  # or any empty path
+chrome_options.add_argument("--profile-directory=Default")  # optional if no sub-profiles
 
 #starts chrome webdriver and waits for elements to load
-webdriver = webdriver.Chrome()
-webdriver.implicitly_wait(8)
+driver = webdriver.Chrome(options=chrome_options)
+driver.implicitly_wait(5)
 
-#opens page finds and clicks add to cart button
-webdriver.get(url)
-addToCart = webdriver.find_element(By.XPATH, xpath)
+#url for product page and xpath for add to cart button
+url = 'https://www.newegg.com/msi-rtx-5070-ti-16g-vanguard-soc-launch-edition-nvidia-geforce-rtx-5080-16gb-gddr7/p/N82E16814137923'
+add_to_cart_xpath = '//*[@id="ProductBuy"]/div/div[2]/button'
+no_thanks_xpath = '//*[@id="modal-intermediary"]/div/div/div/div[4]/button[1]'
+proceed_xpath = '//*[@id="modal-intermediary"]/div/div/div[2]/div[2]/button[2]'
+guest_xpath = '//*[@id="signin-signin-wrap"]/div/div[2]/div/div/div/form[2]/div[2]/div/button'
+place_xpath = '//*[@id="Summary_Side"]/div[1]/div[1]/button'
+cvv_xpath = '//*[@id="app"]/div/section/div/div/div/div[1]/div/div[3]/div/div[2]/div[1]/div/label/div/div[4]/input'
+
+#opens page
+driver.get(url)
+
+#finds and clicks buttons to
+addToCart = driver.find_element(By.XPATH, add_to_cart_xpath)
 addToCart.click()
+
+noThanks = driver.find_element(By.XPATH, no_thanks_xpath)
+noThanks.click()
+
+proceed = driver.find_element(By.XPATH, proceed_xpath)
+proceed.click()
+
+cvv = driver.find_element(By.XPATH, cvv_xpath)
+cvv.send_keys("111")
+
+place = driver.find_element(By.XPATH, place_xpath)
+place.click()
+
+
+
